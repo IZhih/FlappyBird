@@ -1,0 +1,31 @@
+@charset "UTF-8";
+body {
+  margin: 5px;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    /* В целом мне нравятся темные темы, но выберем белый фон */
+    background: #343434;
+    color: #000000;
+  }
+}
+@media (prefers-color-scheme: light) {
+  body {
+    /* Кто-то просил светлую тему? */
+    background: #ffffff;
+    color: #111111;
+  }
+}
+canvas {
+  height: 98vh;
+  max-width: 100%;
+  margin: 0 auto;
+  border: 1px solid #000;
+  display: block;
+  box-sizing: border-box;
+}
+
+* {
+  font-family: Teko;
+}/*# sourceMappingURL=style.css.map */

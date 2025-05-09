@@ -1,0 +1,18 @@
+body {
+  margin: 5px;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    /* В целом мне нравятся темные темы, но выберем белый фон */
+    background: #343434;
+    color: #000000;
+  }
+}
+@media (prefers-color-scheme: light) {
+  body {
+    /* Кто-то просил светлую тему? */
+    background: #ffffff;
+    color: #111111;
+  }
+}

@@ -2,9 +2,8 @@ import Config from './config.js';
 import Physic from './physic.js';
 
 class Sprite {
-  static sheet;
+  static sheet = new Image();
   constructor(srcX, srcY, srcW, srcH, destX, destY, destW, destH) {
-    Sprite.sheet = new Image();
     Sprite.sheet.src = './img/sprite-sheet.png';
 
     this.srcX = srcX;
@@ -82,8 +81,8 @@ class ForegroundSprite extends Sprite {
 }
 
 class BirdSprite extends Sprite {
-  static width = 34;
-  static height = 26;
+  static width = Config.sprite.bird.width;
+  static height = Config.sprite.bird.height;
 
   constructor(srcX, srcY, destX, destY, destW, destH) {
     super(srcX, srcY, BirdSprite.width, BirdSprite.height, destX, destY, destW, destH);
@@ -101,26 +100,49 @@ class Bird {
     this.x = Canvas.node.width / 2 - BirdSprite.width / 2;
     this.y = 240;
     this.velocityY = 0; // вертикальная скорость птицы
-    this.tangage = 0.1; // угол наклона птицы. Положителельные значения наклоняют птицу вверх
+    this.tangage = 0.1; // угол наклона птицы. Положительные значения наклоняют птицу вверх
     this.frame = [];
-    this.frame.push(new BirdSprite(276, 112, BirdSprite.width, BirdSprite.height));
-    this.frame.push(new BirdSprite(276, 138, BirdSprite.width, BirdSprite.height));
-    this.frame.push(new BirdSprite(276, 164, BirdSprite.width, BirdSprite.height));
+    this.frame.push(
+      new BirdSprite(
+        Config.sprite.bird.sprite0.srcX,
+        Config.sprite.bird.sprite0.srcY,
+        BirdSprite.width,
+        BirdSprite.height
+      )
+    );
+    this.frame.push(
+      new BirdSprite(
+        Config.sprite.bird.sprite1.srcX,
+        Config.sprite.bird.sprite1.srcY,
+        BirdSprite.width,
+        BirdSprite.height
+      )
+    );
+    this.frame.push(
+      new BirdSprite(
+        Config.sprite.bird.sprite2.srcX,
+        Config.sprite.bird.sprite2.srcY,
+        BirdSprite.width,
+        BirdSprite.height
+      )
+    );
   }
 
   draw(index) {
     Canvas.context.save();
     // Canvas.context.translate(this.x, this.y);
-    Canvas.context.translate(this.x + BirdSprite.width/2, this.y + BirdSprite.height/2);
+    Canvas.context.translate(this.x + BirdSprite.width / 2, this.y + BirdSprite.height / 2);
     Canvas.context.rotate(this.tangage);
-    this.frame[index].draw(-BirdSprite.width/2, -BirdSprite.height/2);
+    this.frame[index].draw(-BirdSprite.width / 2, -BirdSprite.height / 2);
     // Canvas.context.translate(-this.x - BirdSprite.width, -this.y - BirdSprite.height);
     Canvas.context.restore();
   }
 
   jump() {
     // this.y -= Pipes.gap / 2;
-    this.velocityY = 500;
+    const jumpHeight = Pipes.gap / 2 - BirdSprite.height;
+    const velocity = Math.sqrt(2 * jumpHeight * Physic.g);
+    this.velocityY = velocity;
   }
 
   crash() {
@@ -129,8 +151,8 @@ class Bird {
 }
 
 class PipeSprite extends Sprite {
-  static width = 52;
-  static height = 400;
+  static width = Config.sprite.pipe.width;
+  static height = Config.sprite.pipe.height;
 
   constructor(srcX, srcY, srcW, srcH, destX, destY, destW, destH) {
     super(srcX, srcY, srcW, srcH, destX, destY, destW, destH);
@@ -146,8 +168,23 @@ class Pipes {
   constructor(y, time) {
     this.timeStamp = time;
     this.x = Canvas.node.width;
-    this.upper = new PipeSprite(554, 0, PipeSprite.width, PipeSprite.height, 0, y - PipeSprite.height);
-    this.lower = new PipeSprite(502, 0, PipeSprite.width, PipeSprite.height, 0, y + Pipes.gap);
+    this.upper = new PipeSprite(
+      Config.sprite.pipe.upper.srcX,
+      Config.sprite.pipe.upper.srcY,
+      PipeSprite.width,
+      PipeSprite.height,
+      0,
+      y - PipeSprite.height
+    );
+
+    this.lower = new PipeSprite(
+      Config.sprite.pipe.lower.srcX,
+      Config.sprite.pipe.lower.srcY,
+      PipeSprite.width,
+      PipeSprite.height,
+      0,
+      y + Pipes.gap
+    );
   }
 
   draw() {
@@ -167,23 +204,53 @@ export default class Canvas {
     this.time = 0; // время полёта птицы
     this.physic = new Physic();
 
-    this.background = new BackgroundSprite(0, 0, 276, 228, 0, Canvas.node.height - 228);
+    this.background = new BackgroundSprite(
+      Config.sprite.background.srcX,
+      Config.sprite.background.srcY,
+      Config.sprite.background.width,
+      Config.sprite.background.height,
+      0,
+      Canvas.node.height - 228
+    );
 
-    this.foreground = new ForegroundSprite(276, 0, 224, 112, 0, Canvas.node.height - 82);
+    this.foreground = new ForegroundSprite(
+      Config.sprite.foreground.srcX,
+      Config.sprite.foreground.srcY,
+      Config.sprite.foreground.width,
+      Config.sprite.foreground.height,
+      0,
+      Canvas.node.height - 82
+    );
 
     this.bird = new Bird();
 
     this.pipes = [];
     this.pipesCounter = 0;
 
+    // this.pipes.draw = function (time) {
+    //   this.forEach((element) => {
+    //     element.x = Canvas.node.width - Math.floor((time - element.timeStamp) * Config.velocityX);
+    //     if (element.x >= -PipeSprite.width) {
+    //       element.draw();
+    //     } else {
+    //       this.shift();
+    //     }
+    //   });
+    // };
+
     this.pipes.draw = function (time) {
-      this.forEach((element) => {
-        element.x = Canvas.node.width - Math.floor((time - element.timeStamp) * Config.velocityX);
-        if (element.x >= -PipeSprite.width) {
-          element.draw();
-        } else {
-          this.shift();
-        }
+      // Удаляем старые трубы заранее (вне forEach)
+      while (
+        this.length > 0 &&
+        Canvas.node.width - Math.floor((time - this[0].timeStamp) * Config.velocityX) < -PipeSprite.width
+      ) {
+        this.shift();
+      }
+
+      // Отрисовываем оставшиеся трубы
+      this.forEach((pipe) => {
+        pipe.x = Canvas.node.width - Math.floor((time - pipe.timeStamp) * Config.velocityX);
+        pipe.draw();
       });
     };
 
@@ -197,7 +264,7 @@ export default class Canvas {
     const minY = 50;
     const maxY = 250;
     const y = Math.floor(Math.random() * (maxY - minY) + minY);
-    // const y = 50;
+    // const y = 408 - Pipes.gap/2;
     this.pipes.push(new Pipes(y, this.time));
   }
 
@@ -208,12 +275,13 @@ export default class Canvas {
       this.pipesCounter++;
     }
 
-    // this.birdFrame = Math.floor((this.time * 6) % 3);
     [this.bird.y, this.bird.velocityY] = Physic.gravity(this.bird.y, this.bird.velocityY);
-    // this.bird.tangage = Math.PI/2
     this.bird.tangage = -Math.atan(this.bird.velocityY / Config.velocityX);
-    // console.log(this.bird.tangage);
 
+    if (this.bird.y <= 0) {
+      this.bird.y = 1;
+      this.bird.velocityY = 0;
+    }
 
     if (this.bird.y > Canvas.node.height - 112) {
       this.bird.jump();
@@ -223,9 +291,9 @@ export default class Canvas {
   draw() {
     this.background.draw(this.time);
     this.pipes.draw(this.time);
-    if (this.bird.tangage < -Math.PI/4) {
+    if (this.bird.tangage < -Math.PI / 4) {
       this.bird.draw(2);
-    } else if (this.bird.tangage >= Math.PI/4){
+    } else if (this.bird.tangage >= Math.PI / 4) {
       this.bird.draw(0);
     } else {
       this.bird.draw(1);
@@ -236,6 +304,7 @@ export default class Canvas {
 
   render() {
     this.time += 1 / 60; // время игры
+    // this.time += 0.01;
     this.update();
     this.draw();
     window.requestAnimationFrame(this.render.bind(this));

@@ -11,11 +11,14 @@ export default class Control {
     });
 
     window.addEventListener('keydown', (key) => {
-			if (key.code == 'Space') {
-				return callback('jump');
-			}
-	
+      if (key.code == 'Space') {
+        return callback('jump');
+      }
     });
+
+    window.addEventListener('click', () => {
+      return callback('jump');
+    } )
   }
 
   gamepadListener() {}

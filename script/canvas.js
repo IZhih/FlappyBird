@@ -96,6 +96,8 @@ class BirdSprite extends Sprite {
 }
 
 class Bird {
+  static width = BirdSprite.width;
+  static height = BirdSprite.height;
   constructor() {
     this.x = Canvas.node.width / 2 - BirdSprite.width / 2;
     this.y = 240;
@@ -131,16 +133,16 @@ class Bird {
   draw(index) {
     Canvas.context.save();
     // Canvas.context.translate(this.x, this.y);
-    Canvas.context.translate(this.x + BirdSprite.width / 2, this.y + BirdSprite.height / 2);
+    Canvas.context.translate(this.x + Bird.width / 2, this.y + Bird.height / 2);
     Canvas.context.rotate(this.tangage);
-    this.frame[index].draw(-BirdSprite.width / 2, -BirdSprite.height / 2);
+    this.frame[index].draw(-Bird.width / 2, -Bird.height / 2);
     // Canvas.context.translate(-this.x - BirdSprite.width, -this.y - BirdSprite.height);
     Canvas.context.restore();
   }
 
   jump() {
     // this.y -= Pipes.gap / 2;
-    const jumpHeight = Pipes.gap / 2 - BirdSprite.height;
+    const jumpHeight = Pipes.gap / 2 - Bird.height;
     const velocity = Math.sqrt(2 * jumpHeight * Physic.g);
     this.velocityY = velocity;
   }
@@ -167,6 +169,7 @@ class Pipes {
   static gap = BirdSprite.height * 5;
   constructor(y, time) {
     this.timeStamp = time;
+    this.isPassed = false;
     this.x = Canvas.node.width;
     this.upper = new PipeSprite(
       Config.sprite.pipe.upper.srcX,
@@ -202,6 +205,7 @@ export default class Canvas {
     Canvas.node.height = Config.height;
     Canvas.context = Canvas.node.getContext('2d');
     this.time = 0; // время полёта птицы
+    this.score = 0; // Очки игры
     this.physic = new Physic();
 
     this.background = new BackgroundSprite(
@@ -210,7 +214,7 @@ export default class Canvas {
       Config.sprite.background.width,
       Config.sprite.background.height,
       0,
-      Canvas.node.height - 228
+      Canvas.node.height - Config.sprite.background.height - Config.sprite.foreground.height
     );
 
     this.foreground = new ForegroundSprite(
@@ -219,7 +223,7 @@ export default class Canvas {
       Config.sprite.foreground.width,
       Config.sprite.foreground.height,
       0,
-      Canvas.node.height - 82
+      Canvas.node.height - Config.sprite.foreground.height
     );
 
     this.bird = new Bird();
@@ -260,11 +264,22 @@ export default class Canvas {
     Sprite.sheet.onload = this.render(this.background);
   }
 
+  displayScore(score) {
+    const ctx = Canvas.context;
+
+    ctx.fillStyle = '#EEE';
+    ctx.strokeStyle = '#111';
+    ctx.font = 'italic 30pt Teko';
+    ctx.textBaseline = 'top';
+    ctx.textAlign = 'right';
+    ctx.fillText(score, Config.width - 15, 0);
+    // ctx.strokeText(score, Config.width - 15, 0);
+  }
+
   newPipes() {
-    const minY = 50;
-    const maxY = 250;
-    const y = Math.floor(Math.random() * (maxY - minY) + minY);
-    // const y = 408 - Pipes.gap/2;
+    const highestY = 50;
+    const lowestY = Config.height - Config.sprite.foreground.height - Pipes.gap - highestY;
+    const y = Math.floor(Math.random() * (lowestY - highestY) + highestY);
     this.pipes.push(new Pipes(y, this.time));
   }
 
@@ -275,17 +290,49 @@ export default class Canvas {
       this.pipesCounter++;
     }
 
+    // Проверяем, пролетела ли птица через трубу
+    this.pipes.forEach((element) => {
+      if (element.isPassed == false) {
+        const middle = Config.width / 2 - PipeSprite.width / 2;
+        if (element.x <= middle) {
+          element.isPassed = true;
+          this.score++;
+        }
+      }
+    });
+
+    // Удаляем трубы, полностью вышедшие за пределы поля
+    if (this.pipes[0].x < -PipeSprite.width) {
+      this.pipes.shift();
+    }
+
+    // Применяем гравитацию на птичку
     [this.bird.y, this.bird.velocityY] = Physic.gravity(this.bird.y, this.bird.velocityY);
+
+    // Вычисляем угол наклона птицы
     this.bird.tangage = -Math.atan(this.bird.velocityY / Config.velocityX);
 
+    // Ограничитель выхода птицы за пределы поля сверху
     if (this.bird.y <= 0) {
       this.bird.y = 1;
       this.bird.velocityY = 0;
     }
 
-    if (this.bird.y > Canvas.node.height - 112) {
+    // Проверяем столкновение с землёй
+    if (this.bird.y > Canvas.node.height - Config.sprite.foreground.height - Bird.width) {
+      // this.bird.crash();
+      // Для отладки, не даём упасть птичке
       this.bird.jump();
     }
+
+    // Проверяем столкновение с трубой
+    this.pipes.forEach((pipes) => {
+      if (pipes.x <= this.bird.x + Bird.width && pipes.x + PipeSprite.width >= this.bird.x) {
+        if (this.bird.y - Bird.height <= pipes.y || this.bird.y >= pipes.y + Pipes.gap) {
+          this.bird.crash();
+        }
+      }
+    });
   }
 
   draw() {
@@ -298,13 +345,13 @@ export default class Canvas {
     } else {
       this.bird.draw(1);
     }
-    // this.bird[this.birdFrame].draw(this.bird.x, this.bird.y - this.birdFrame);
+
+    this.displayScore(this.score);
     this.foreground.draw(this.time);
   }
 
   render() {
     this.time += 1 / 60; // время игры
-    // this.time += 0.01;
     this.update();
     this.draw();
     window.requestAnimationFrame(this.render.bind(this));

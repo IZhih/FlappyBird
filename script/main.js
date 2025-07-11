@@ -6,8 +6,9 @@ class Game {
     this.config = new Config();
     this.canvas = new Canvas(aNodeId, this.config.width, this.config.height);
     this.spriteSheet = this.loadSpriteSheet(this.config.sprite.src);
-    this.spriteSheet.onload = this.render(this);
-
+    this.spriteSheet.onload = () => {
+      this.render(this);
+    };
   }
 
   loadSpriteSheet(src) {

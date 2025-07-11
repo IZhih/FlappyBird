@@ -22,12 +22,12 @@ export default class Canvas {
       img,
       coords.srcX,
       coords.srcY,
-      coords.width,
-      coords.height,
+      coords.srcW,
+      coords.srcH,
       coords.destX,
       coords.destY,
-      coords.width,
-      coords.height
+      coords.destW,
+      coords.destH
     );
   }
 }

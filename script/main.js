@@ -7,7 +7,7 @@ class Game {
     this.canvas = new Canvas(aNodeId, this.config.width, this.config.height);
     this.spriteSheet = this.loadSpriteSheet(this.config.sprite.src);
     this.spriteSheet.onload = () => {
-      this.render(this);
+      this.render();
     };
   }
 
@@ -18,15 +18,19 @@ class Game {
     return result;
   }
 
-  render() {
+  render(scene) {
     console.log('Запущена функция render()');
     console.log(this);
     const sprite = this.config.sprite.foreground;
-    sprite.destX = 100;
-    sprite.destY = 100;
+    sprite.destX = 0;
+    sprite.destY = this.config.height - sprite.height;
+    sprite.destW = this.config.width;
+    sprite.destH = sprite.height;
+    sprite.srcW = sprite.width;
+    sprite.srcH = sprite.height;
     this.canvas.drawImage(this.spriteSheet, sprite);
 
-    // window.requestAnimationFrame(this.render.bind(this));
+    // window.requestAnimationFrame(this.render.bind(this, scene));
   }
 }
 

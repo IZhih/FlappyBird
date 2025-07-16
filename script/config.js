@@ -15,40 +15,41 @@ export default class Config {
       background: {
         srcX: 0,
         srcY: 0,
-        width: 276,
-        height: 228,
+        srcW: 276,
+        srcH: 228,
       },
 
       foreground: {
         srcX: 276,
         srcY: 0,
-        width: 224,
-        height: 112,
+        srcW: 224,
+        srcH: 112,
       },
 
-      bird: {
-        width: 34,
-        height: 26,
+      bird0: {
+        srcW: 34,
+        srcH: 26,
+        srcX: 276,
+        srcY: 112,
+      },
 
-        sprite0: {
-          srcX: 276,
-          srcY: 112,
-        },
+      bird1: {
+        srcW: 34,
+        srcH: 26,
+        srcX: 276,
+        srcY: 138,
+      },
 
-        sprite1: {
-          srcX: 276,
-          srcY: 138,
-        },
-
-        sprite2: {
-          srcX: 276,
-          srcY: 164,
-        },
+      bird2: {
+        srcW: 34,
+        srcH: 26,
+        srcX: 276,
+        srcY: 164,
       },
 
       medal: {
-        width: 44,
-        height: 44,
+        srcW: 44,
+        srcH: 44,
         none: {
           srcX: 312,
           srcY: 112,
@@ -68,8 +69,8 @@ export default class Config {
       },
 
       pipe: {
-        width: 52,
-        height: 400,
+        srcW: 52,
+        srcH: 400,
 
         lower: {
           srcX: 502,
@@ -86,38 +87,38 @@ export default class Config {
         getReady: {
           srcX: 0,
           srcY: 228,
-          width: 174,
-          height: 44,
+          srcW: 174,
+          srcH: 44,
         },
 
         gameOver: {
           srcX: 193,
           srcY: 228,
-          width: 188,
-          height: 44,
+          srcW: 188,
+          srcH: 44,
         },
       },
 
       guide: {
         srcX: 0,
         srcY: 227,
-        width: 174,
-        height: 116,
+        srcW: 174,
+        srcH: 116,
       },
 
       scoreWindow: {
         srcX: 174,
         srcY: 227,
-        width: 226,
-        height: 116,
+        srcW: 226,
+        srcH: 116,
       },
 
       button: {
         start: {
           srcX: 246,
           srcY: 400,
-          width: 82,
-          height: 28,
+          srcW: 82,
+          srcH: 28,
         },
       },
     };

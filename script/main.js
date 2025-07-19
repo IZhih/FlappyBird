@@ -11,14 +11,17 @@ class Game {
     this.scenes = new Scenes(this.sprites, this.config);
 
     this.sprites.sheet.onload = () => {
-      this.render(this.scenes.greeting[0]);
+      this.render(this.scenes.greeting);
     };
   }
 
   render(scene) {
-    this.canvas.drawImage(this.sprites.sheet, scene);
-
+    this.drawScene(scene);
     window.requestAnimationFrame(this.render.bind(this, scene));
+  }
+
+  drawScene(scene) {
+    scene.draw(this.canvas);
   }
 }
 

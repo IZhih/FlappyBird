@@ -1,10 +1,10 @@
-export default class Scene {
+export default class Scenes {
   constructor(sprites, config) {
-		this.greeting = [];
-    this.greeting.push(this.placeSprite(sprites.foreground, 0, config.height - sprites.foreground.srcH, config.width));
-    this.greeting.push(this.placeSprite(sprites.background, 0, 0, config.width));
+    this.greeting = new Greeting(sprites, config);
   }
+}
 
+class SceneFunctions {
   placeSprite(spriteName, destX, destY, destW, destH) {
     const result = spriteName;
     result.destX = destX;
@@ -21,5 +21,31 @@ export default class Scene {
     }
 
     return result;
+  }
+}
+
+class Greeting extends SceneFunctions {
+  constructor(sprites, config) {
+    super();
+    this.sprites = sprites;
+    this.content = [];
+    this.content.foreground = this.placeSprite(
+      sprites.foreground,
+      0,
+      config.height - sprites.foreground.srcH,
+      config.width
+    );
+
+    this.content.background = this.placeSprite(
+      sprites.background,
+      0,
+      config.height - sprites.foreground.srcH - sprites.background.srcH,
+      config.width
+    );
+  }
+
+  draw(tool) {
+    tool.drawImage(this.sprites.sheet, this.content.foreground);
+    tool.drawImage(this.sprites.sheet, this.content.background);
   }
 }

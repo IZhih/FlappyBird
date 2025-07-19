@@ -30,4 +30,14 @@ export default class Canvas {
       coords.destH
     );
   }
+
+  fillRect(rect) {
+    this.context.fillStyle = rect.color;
+    this.context.fillRect(
+      rect.destX,
+      rect.destY,
+      rect.destW,
+      rect.destH
+    )
+  }
 }

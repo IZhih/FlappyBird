@@ -22,6 +22,17 @@ class SceneFunctions {
 
     return result;
   }
+
+  placeFill(color, destX, destY, destW, destH) {
+    const result = [];
+    result.color = color;
+    result.destX = destX;
+    result.destY = destY;
+    result.destW = destW;
+    result.destH = destH;
+
+    return result;
+  }
 }
 
 class Greeting extends SceneFunctions {
@@ -29,6 +40,8 @@ class Greeting extends SceneFunctions {
     super();
     this.sprites = sprites;
     this.content = [];
+    this.content.sky = this.placeFill(config.sprite.sky.color, 0, 0, config.width, config.height);
+
     this.content.foreground = this.placeSprite(
       sprites.foreground,
       0,
@@ -45,6 +58,7 @@ class Greeting extends SceneFunctions {
   }
 
   draw(tool) {
+    tool.fillRect(this.content.sky);
     tool.drawImage(this.sprites.sheet, this.content.foreground);
     tool.drawImage(this.sprites.sheet, this.content.background);
   }

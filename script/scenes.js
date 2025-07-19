@@ -55,11 +55,37 @@ class Greeting extends SceneFunctions {
       config.height - sprites.foreground.srcH - sprites.background.srcH,
       config.width
     );
+
+    this.content.bird = [];
+    this.content.bird.push(
+      this.placeSprite(
+        sprites.bird[0],
+        config.width / 2 - config.sprite.bird0.srcW / 2,
+        config.height / 2 - config.sprite.foreground.srcH - config.sprite.bird0.srcH / 2
+      )
+    );
+
+    this.content.bird.push(
+      this.placeSprite(
+        sprites.bird[1],
+        config.width / 2 - config.sprite.bird0.srcW / 2,
+        config.height / 2 - config.sprite.foreground.srcH - config.sprite.bird0.srcH / 2
+      )
+    );
+
+    this.content.bird.push(
+      this.placeSprite(
+        sprites.bird[2],
+        config.width / 2 - config.sprite.bird0.srcW / 2,
+        config.height / 2 - config.sprite.foreground.srcH - config.sprite.bird0.srcH / 2
+      )
+    );
   }
 
   draw(tool) {
     tool.fillRect(this.content.sky);
     tool.drawImage(this.sprites.sheet, this.content.foreground);
     tool.drawImage(this.sprites.sheet, this.content.background);
+    tool.drawImage(this.sprites.sheet, this.content.bird[0]);
   }
 }

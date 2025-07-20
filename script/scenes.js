@@ -40,7 +40,7 @@ class Greeting extends SceneFunctions {
     super();
     this.sprites = sprites;
     this.content = [];
-    this.content.sky = this.placeFill(config.sprite.sky.color, 0, 0, config.width, config.height);
+    this.content.sky = this.placeFill(config.sprites.sky.color, 0, 0, config.width, config.height);
 
     this.content.foreground = this.placeSprite(
       sprites.foreground,
@@ -60,24 +60,24 @@ class Greeting extends SceneFunctions {
     this.content.bird.push(
       this.placeSprite(
         sprites.bird[0],
-        config.width / 2 - config.sprite.bird0.srcW / 2,
-        config.height / 2 - config.sprite.foreground.srcH - config.sprite.bird0.srcH / 2
+        config.width / 2 - config.sprites.bird0.srcW / 2,
+        config.height / 2 - config.sprites.foreground.srcH - config.sprites.bird0.srcH / 2
       )
     );
 
     this.content.bird.push(
       this.placeSprite(
         sprites.bird[1],
-        config.width / 2 - config.sprite.bird0.srcW / 2,
-        config.height / 2 - config.sprite.foreground.srcH - config.sprite.bird0.srcH / 2
+        config.width / 2 - config.sprites.bird0.srcW / 2,
+        config.height / 2 - config.sprites.foreground.srcH - config.sprites.bird0.srcH / 2
       )
     );
 
     this.content.bird.push(
       this.placeSprite(
         sprites.bird[2],
-        config.width / 2 - config.sprite.bird0.srcW / 2,
-        config.height / 2 - config.sprite.foreground.srcH - config.sprite.bird0.srcH / 2
+        config.width / 2 - config.sprites.bird0.srcW / 2,
+        config.height / 2 - config.sprites.foreground.srcH - config.sprites.bird0.srcH / 2
       )
     );
   }

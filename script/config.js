@@ -6,7 +6,7 @@ export default class Config {
     this.pipesInterval = (54 * 4) / this.velocityX; // интервал между трубами, привязанный к скорости
 
     // координаты спрайтов в спрайтшите
-    this.sprite = {
+    this.sprites = {
       src: './img/sprite-sheet.png',
       sky: {
         color: 'skyblue',

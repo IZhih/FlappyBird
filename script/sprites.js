@@ -1,14 +1,14 @@
 export default class Sprites {
   constructor(config) {
-    this.sheet = this.loadSpriteSheet(config.sprite.src);
-    this.foreground = this.loadSprite(config.sprite.foreground);
-    this.background = this.loadSprite(config.sprite.background);
+    this.sheet = this.loadSpriteSheet(config.sprites.src);
+    this.foreground = this.loadSprite(config.sprites.foreground);
+    this.background = this.loadSprite(config.sprites.background);
     this.bird = [];
-    this.bird.push(this.loadSprite(config.sprite.bird0));
-    this.bird.push(this.loadSprite(config.sprite.bird1));
-    this.bird.push(this.loadSprite(config.sprite.bird2));
-    this.pipeLower = this.loadSprite(config.sprite.pipe.lower);
-    this.pipeHigher = this.loadSprite(config.sprite.pipe.higher);
+    this.bird.push(this.loadSprite(config.sprites.bird0));
+    this.bird.push(this.loadSprite(config.sprites.bird1));
+    this.bird.push(this.loadSprite(config.sprites.bird2));
+    this.pipeLower = this.loadSprite(config.sprites.pipe.lower);
+    this.pipeHigher = this.loadSprite(config.sprites.pipe.higher);
   }
 
   loadSpriteSheet(src) {
